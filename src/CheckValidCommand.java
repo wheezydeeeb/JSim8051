@@ -126,9 +126,8 @@ public class CheckValidCommand {
     //called on mnemonic = "DJNZ"
     public void on_DJNZ() {
         if (is_op_2_lbl) {
-            if (reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] != 0) {
+            if (--reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] != 0) {
                 reg_PC = (short) (Byte.parseByte(op_2) - 1);
-                reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']--;
             }
         }
         System.out.println("DJNZ executed");
