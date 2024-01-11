@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
@@ -49,15 +50,30 @@ public class CheckValidCommand {
      */
     private boolean[] PSW = new boolean[8];
 
-    // accepts the entire 8051 program from the user
+    // path of the program to be executed
+    private String program_path = "";
+
+    public void get_program_path() throws IOException {
+        program_path = "tests/" + (new BufferedReader(new InputStreamReader(System.in))).readLine().trim() + ".txt";
+    }
+
+    // read program from file to 'String program[]'
     public void get_program() throws IOException {
-        InputStreamReader isr = new InputStreamReader(System.in);
-        BufferedReader br = new BufferedReader(isr);
+        BufferedReader br = new BufferedReader(new FileReader(program_path));
+        String line;
         int count = 0;
-        do {
-            program[count++] = br.readLine().trim();
-        } while (!program[count - 1].equalsIgnoreCase("END"));
-        program[count - 1] = null;
+        while (( line = br.readLine() ) != null){
+            program[count++] = line;
+        }
+    }
+
+    public void disp_program(){
+        int count = 0;
+        System.out.println("PROGRAM:\n--------------");
+        while(program[count++] != null){
+            System.out.println(program[count - 1]);
+        }
+        System.out.println("------------");
     }
 
     public void set_instruction() throws IOException {
@@ -235,14 +251,17 @@ public class CheckValidCommand {
         PSW = new boolean[8];
     }
 
+
+
     public static void main(String[] args) throws IOException {
         CheckValidCommand ck = new CheckValidCommand();
         do {
+            ck.get_program_path();
             ck.get_program();
+            ck.disp_program();
             ck.run();
             ck.disp_reg();
             ck.reset();
-            ck.disp_reg();
         } while (true);
     }
 }
