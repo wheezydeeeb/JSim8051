@@ -1,0 +1,5 @@
+mov r1, #7
+mov r2, r1
+add A, r2
+djnz r1, 2
+end
