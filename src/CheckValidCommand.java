@@ -106,7 +106,7 @@ public class CheckValidCommand {
 
     // called on mnemonic = "INC"
     public void on_INC() {
-
+        reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']++;
     }
 
     // called on mnemonic = "ADD"
@@ -163,6 +163,9 @@ public class CheckValidCommand {
                     break;
                 case "DEC", "dec":
                     on_DEC();
+                    break;
+                case "INC", "inc":
+                    on_INC();
                     break;
                 case "DJNZ", "djnz":
                     on_DJNZ();

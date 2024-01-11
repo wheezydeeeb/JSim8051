@@ -1,0 +1,4 @@
+mov r4, #5
+inc r4
+djnz r4, 1
+end
