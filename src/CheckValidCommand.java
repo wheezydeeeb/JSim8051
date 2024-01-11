@@ -133,6 +133,9 @@ public class CheckValidCommand {
         System.out.println("DJNZ executed");
     }
 
+    public void on_DEC() {
+        reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']--;
+    }
 
     public void disp_reg() {
         for (int i = 0; i < 4; i++) {
@@ -157,6 +160,9 @@ public class CheckValidCommand {
                 case "CLR", "clr":
                     // rs1 = !dst.equals("PSW.4");
                     // rs2 = !dst.equals("PSW.3");
+                    break;
+                case "DEC", "dec":
+                    on_DEC();
                     break;
                 case "DJNZ", "djnz":
                     on_DJNZ();
