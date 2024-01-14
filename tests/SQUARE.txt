@@ -1,5 +1,6 @@
 mov r1, #7
 mov r2, r1
+dec r2
 add A, r2
-djnz r1, 2
+djnz r1, 3
 end

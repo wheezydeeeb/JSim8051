@@ -149,6 +149,8 @@ public class CheckValidCommand {
         System.out.println("DJNZ executed");
     }
 
+    
+
     public void on_DEC() {
         reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']--;
     }
@@ -206,6 +208,7 @@ public class CheckValidCommand {
             System.out.println("run loop executed");
             set_instruction();
             execute_cmd();
+            disp_reg();
         }
     }
 
@@ -260,7 +263,7 @@ public class CheckValidCommand {
             ck.get_program();
             ck.disp_program();
             ck.run();
-            ck.disp_reg();
+            // ck.disp_reg();
             ck.reset();
         } while (true);
     }
