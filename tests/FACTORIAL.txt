@@ -1,4 +1,4 @@
-mov r1, #4
+mov r1, #3
 mov r2, r1
 mov r4, r1
 dec r2

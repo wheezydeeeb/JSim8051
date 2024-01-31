@@ -98,8 +98,7 @@ public class CheckValidCommand {
             is_op_2_reg = op_2.charAt(0) == 'R' || op_2.charAt(0) == 'r';
             is_op_2_lbl = Character.isDigit(op_2.charAt(0));
         }
-        catch (Exception e){
-
+        catch (Exception ignored){
         }
     }
 
