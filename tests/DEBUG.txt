@@ -1,0 +1,5 @@
+INC A
+INC A
+INC A
+MOV R2, A
+END

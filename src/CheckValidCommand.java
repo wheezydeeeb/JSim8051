@@ -14,6 +14,9 @@ public class CheckValidCommand {
     String mnemonic = "";
     String op_1 = "";
     String op_2 = "";
+    boolean is_op1_acc = false;
+    boolean is_op1_reg = false;
+    boolean is_op2_acc = false;
     boolean is_op_2_val = false;
     boolean is_op_2_reg = false;
     boolean is_op_2_lbl = false;
@@ -25,9 +28,9 @@ public class CheckValidCommand {
      */
 
     // register banks
-    private byte[][] reg_R = new byte[4][8];
-    private byte reg_A = 0;
-    private byte reg_B = 0;
+    private int[][] reg_R = new int[4][8];
+    private int reg_A = 0;
+    private int reg_B = 0;
     // program counter
     private short reg_PC = 0;
 
@@ -93,7 +96,12 @@ public class CheckValidCommand {
             op_1 = comma_idx != -1 ? operands.substring(0, comma_idx).trim() : operands;
             op_2 = comma_idx != -1 ? operands.substring(comma_idx + 1).trim() : "";
 
-            // check for type of value in operand 2
+            // Check the type of operand 1.
+            is_op1_acc = op_1.charAt(0) == 'A' || op_1.charAt(0) == 'a';
+            if (!is_op1_acc) is_op1_reg = op_1.charAt(0) == 'R' || op_1.charAt(0) == 'r';
+
+            // Check for type of operand 2.
+            is_op2_acc = op_2.charAt(0) == 'A' || op_2.charAt(0) == 'a';
             is_op_2_val = op_2.charAt(0) == '#';
             is_op_2_reg = op_2.charAt(0) == 'R' || op_2.charAt(0) == 'r';
             is_op_2_lbl = Character.isDigit(op_2.charAt(0));
@@ -102,26 +110,33 @@ public class CheckValidCommand {
         }
     }
 
-    public void disp_instruction_variables() {
-        System.out.println();
-    }
+        public void disp_instruction_variables() {
+            System.out.println();
+        }
 
     // called on mnemonic = "MOV"
     public void on_MOV() {
+        if (is_op1_acc) {
+            // immediate addressing mode
+            if (is_op_2_val) {
+                reg_A += Byte.parseByte(op_2.substring(1).trim());
+            }
+            // register to register addressing mode
+            else if (is_op_2_reg) {
+                // reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] = reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
+                reg_A += reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
+            }
+        }
+        else if (is_op2_acc){
+            if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] += reg_A;
+        }
         System.out.println("MOV executed");
-        // immediate addressing mode
-        if (is_op_2_val) {
-            reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] = Byte.parseByte(op_2.substring(1).trim());
-        }
-        // register to register addressing mode
-        else {
-            reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] = reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
-        }
     }
 
     // called on mnemonic = "INC"
     public void on_INC() {
-        reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']++;
+        if (is_op1_acc) reg_A++;
+        else if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']++;
     }
 
     // called on mnemonic = "ADD"
@@ -155,6 +170,7 @@ public class CheckValidCommand {
     }
 
     public void disp_reg() {
+        System.out.println("A = " + reg_A);
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 8; j++) {
                 System.out.print(reg_R[i][j] + "\t");
@@ -232,7 +248,7 @@ public class CheckValidCommand {
          */
 
         // register banks
-        reg_R = new byte[4][8];
+        reg_R = new int[4][8];
         reg_A = 0;
         reg_B = 0;
         // program counter

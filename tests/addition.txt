@@ -1,0 +1,4 @@
+MOV R0, #12
+MOV R1, #13
+ADD A,R1
+END
