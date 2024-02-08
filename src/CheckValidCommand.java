@@ -16,6 +16,7 @@ public class CheckValidCommand {
     String op_2 = "";
     boolean is_op1_acc = false;
     boolean is_op1_reg = false;
+
     boolean is_op2_acc = false;
     boolean is_op_2_val = false;
     boolean is_op_2_reg = false;
@@ -118,39 +119,43 @@ public class CheckValidCommand {
     public void on_MOV() {
         if (is_op1_acc) {
             // immediate addressing mode
-            if (is_op_2_val) {
-                reg_A += Byte.parseByte(op_2.substring(1).trim());
-            }
+            if (is_op_2_val) reg_A += Byte.parseByte(op_2.substring(1).trim());
             // register to register addressing mode
-            else if (is_op_2_reg) {
-                // reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] = reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
-                reg_A += reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
-            }
+            else if (is_op_2_reg) reg_A += reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
         }
         else if (is_op2_acc){
             if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0'] += reg_A;
+        }
+        else{
+            System.out.println("Syntax error at line " + (reg_PC + 1));
+            System.exit(1);
         }
         System.out.println("MOV executed");
     }
 
     // called on mnemonic = "INC"
     public void on_INC() {
-        if (is_op1_acc) reg_A++;
-        else if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']++;
+        try {
+            if (is_op1_acc) reg_A++;
+            else if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']++;
+        }
+        catch (Exception e){
+            System.out.println("Syntax error at line " + (reg_PC + 1));
+            System.exit(1);
+        }
     }
 
     // called on mnemonic = "ADD"
     public void on_ADD() {
-        System.out.println("ADD executed");
-        boolean is_correct_operand = op_1.equals("A");
-        if (is_correct_operand) {
+        if (is_op1_acc) {
             if (is_op_2_val) {
-                reg_R[0][0] += Byte.parseByte(op_2.substring(1));
+                reg_A += Byte.parseByte(op_2.substring(1));
             } else if (is_op_2_reg) {
-                reg_R[0][0] += reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
+                reg_A += reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_2.charAt(1) - '0'];
             }
 
         }
+        System.out.println("ADD executed");
     }
 
     //called on mnemonic = "DJNZ"
@@ -163,10 +168,17 @@ public class CheckValidCommand {
         System.out.println("DJNZ executed");
     }
 
-    
-
     public void on_DEC() {
-        reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']--;
+        if (is_op1_acc) reg_A--;
+        else if (is_op1_reg) reg_R[(PSW[4] ? 2 : 0) + (PSW[3] ? 1 : 0)][op_1.charAt(1) - '0']--;
+    }
+
+    public void on_CLR() {
+        if (is_op1_acc) reg_A = 0;
+        else {
+            System.out.println("Syntax error at line " + (reg_PC + 1));
+            System.exit(1);
+        }
     }
 
     public void disp_reg() {
@@ -191,8 +203,7 @@ public class CheckValidCommand {
                     PSW[3] = op_1.equals("PSW.3");
                     break;
                 case "CLR", "clr":
-                    // rs1 = !dst.equals("PSW.4");
-                    // rs2 = !dst.equals("PSW.3");
+                    on_CLR();
                     break;
                 case "DEC", "dec":
                     on_DEC();
