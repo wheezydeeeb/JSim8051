@@ -1,20 +1,21 @@
-# 8051 Microcontroller Emulator
 
-## Overview
+        # 8051 Microcontroller Emulator
 
-This project is an educational and simplified emulator for the 8051 microcontroller. It simulates the basic functionalities of the 8051, including a subset of its instruction set, registers, program counter, and status registers. The project is designed to help students and developers understand the inner workings of the 8051 microcontroller by providing a more accessible and manageable version of the original architecture.
+        ## Overview
 
-## Features
+        This project is an educational and simplified emulator for the 8051 microcontroller. It simulates the basic functionalities of the 8051, including a subset of its instruction set, registers, program counter, and status registers. The project is designed to help students and developers understand the inner workings of the 8051 microcontroller by providing a more accessible and manageable version of the original architecture.
 
-- **Instruction Set Support**: Implements a basic subset of the 8051 instruction set, including `MOV`, `INC`, `ADD`, `CLR`, `DJNZ`, and more.
-- **Register Simulation**: Simulates the 8051's registers, including the accumulator (`reg_A`), B register (`reg_B`), and register banks (`reg_R`).
-- **Program Status Word (PSW)**: Provides a simplified version of the PSW, including flags like carry, auxiliary carry, overflow, and register bank selectors.
-- **Program Loader**: Loads assembly-like programs from text files and supports different character encodings and file metadata display.
-- **Instruction Execution**: Executes loaded programs sequentially, updating the state of the emulator with each instruction.
+        ## Features
 
-## Project Structure
+        - **Instruction Set Support**: Implements a basic subset of the 8051 instruction set, including `MOV`, `INC`, `ADD`, `CLR`, `DJNZ`, and more.
+        - **Register Simulation**: Simulates the 8051's registers, including the accumulator (`reg_A`), B register (`reg_B`), and register banks (`reg_R`).
+        - **Program Status Word (PSW)**: Provides a simplified version of the PSW, including flags like carry, auxiliary carry, overflow, and register bank selectors.
+        - **Program Loader**: Loads assembly-like programs from text files and supports different character encodings and file metadata display.
+        - **Instruction Execution**: Executes loaded programs sequentially, updating the state of the emulator with each instruction.
 
-```
+        ## Project Structure
+
+        ```
         .
         ├── src/
         │   ├── CheckValidCommand.java       # Main class orchestrating the program execution
@@ -24,7 +25,7 @@ This project is an educational and simplified emulator for the 8051 microcontrol
         │   ├── InstructionSet.java          # Implements the supported instruction set and their operations
         │   ├── ProgramLoader.java           # Loads programs from files, with error handling and metadata support
         └── README.md                        # Project documentation
-```
+        ```
 
         ## Getting Started
 
