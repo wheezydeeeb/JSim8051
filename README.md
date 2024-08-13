@@ -15,7 +15,6 @@ This project is an educational and simplified emulator for the 8051 microcontrol
 ## Project Structure
 
 ```
-.
 ├── src/
 │   ├── CheckValidCommand.java       # Main class orchestrating the program execution
 │   ├── RegisterBank.java            # Manages the registers and program counter
